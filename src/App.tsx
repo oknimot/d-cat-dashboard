@@ -3,6 +3,7 @@ import React from "react";
 import Header from "./layout/Header";
 import Dashboard from "./layout/Dashboard";
 import { DashboardProvider } from "./core/context/DashboardContext";
+import AddWidget from "./components/modals/AddWidget";
 
 const App: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const App: React.FC = () => {
         <main className="p-4 sm:p-6 lg:p-8">
           <Dashboard />
         </main>
+        <AddWidget />
       </div>
     </DashboardProvider>
   );
