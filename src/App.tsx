@@ -1,7 +1,14 @@
 import React from "react";
+import Header from "./layout/Header";
+import Dashboard from "./layout/Dashboard";
 
 const App: React.FC = () => {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <div>
+      <Header />
+      <Dashboard />
+    </div>
+  );
 };
 
 export default App;
