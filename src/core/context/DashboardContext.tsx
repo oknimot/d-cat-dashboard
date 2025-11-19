@@ -63,6 +63,14 @@ const dashboardReducer = (
           widget.id === action.payload.id ? action.payload : widget
         ),
       };
+    case "REORDER_WIDGETS": {
+      const { source, destination } = action.payload;
+      if (!destination) return state;
+      const orderedWidgets = Array.from(state.widgets);
+      const [reorderedItem] = orderedWidgets.splice(source.index, 1);
+      orderedWidgets.splice(destination.index, 0, reorderedItem);
+      return { ...state, widgets: orderedWidgets };
+    }
     default:
       return state;
   }

@@ -1,3 +1,5 @@
+import type { DropResult } from "@hello-pangea/dnd";
+
 import type { Widget, WidgetType } from "./widget.types";
 
 export interface DashboardState {
@@ -10,4 +12,5 @@ export type DashboardAction =
   | { type: "OPEN_ADD_MODAL" }
   | { type: "CLOSE_ADD_MODAL" }
   | { type: "ADD_WIDGET"; payload: WidgetType }
-  | { type: "UPDATE_WIDGET"; payload: Widget };
+  | { type: "UPDATE_WIDGET"; payload: Widget }
+  | { type: "REORDER_WIDGETS"; payload: DropResult };

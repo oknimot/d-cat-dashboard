@@ -1,11 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+  PencilSquareIcon,
+  TrashIcon,
+  WindowIcon,
+} from "@heroicons/react/24/outline";
+import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 
 import { Widget } from "../../core/types/widget.types";
 import { widgetsManifest } from "../widgets/config/widgets.manifest";
 import { useDashboard } from "../../core/context/DashboardContext";
 
-const WidgetWrapper: React.FC<{ widget: Widget }> = ({ widget }) => {
+const WidgetWrapper: React.FC<{
+  widget: Widget;
+  dragHandleProps: DraggableProvidedDragHandleProps | null;
+}> = ({ widget, dragHandleProps }) => {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [localTitle, setLocalTitle] = useState(widget.title);
   const { dispatch } = useDashboard();
@@ -39,7 +47,10 @@ const WidgetWrapper: React.FC<{ widget: Widget }> = ({ widget }) => {
 
   return (
     <div className="rounded-lg shadow-lg flex flex-col h-full">
-      <header className="bg-gray-700 px-1 flex items-center justify-between rounded-t-lg border-b border-gray-700">
+      <header className="bg-gray-700 px-1 flex items-center justify-between rounded-t-lg">
+        <div {...dragHandleProps} className="cursor-grab text-gray-400">
+          <WindowIcon className="size-4" />
+        </div>
         {isEditingTitle ? (
           <input
             ref={inputRef}
@@ -48,12 +59,12 @@ const WidgetWrapper: React.FC<{ widget: Widget }> = ({ widget }) => {
             onChange={(e) => setLocalTitle(e.target.value)}
             onBlur={saveTitle}
             onKeyDown={titleKeyDown}
-            className="flex-1 text-sm font-semibold bg-gray-700 text-yellow-400 px-2 py-1 rounded border-none focus:outline-none mx-2 min-w-0"
+            className="flex-1 text-sm font-semibold bg-gray-700 text-yellow-400 px-2 py-1 rounded border-none focus:outline-none min-w-0"
           />
         ) : (
           <h3
             onClick={() => setIsEditingTitle(true)}
-            className="text-sm font-semibold text-yellow-400 truncate flex-1 mx-2 cursor-pointer hover:bg-gray-600/50 px-2 py-1 rounded transition-colors select-none border border-transparent"
+            className="text-sm font-semibold text-yellow-400 truncate flex-1 cursor-pointer px-2 py-1 rounded transition-colors select-none border border-transparent"
             title="Click to edit title"
           >
             {widget.title}
@@ -74,7 +85,7 @@ const WidgetWrapper: React.FC<{ widget: Widget }> = ({ widget }) => {
           </button>
         </div>
       </header>
-      <div className="p-4 flex-grow">
+      <div className="p-3 flex-grow rounded-b-lg bg-white">
         <WidgetComponent widget={widget} />
       </div>
     </div>

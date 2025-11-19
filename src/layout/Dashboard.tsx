@@ -1,10 +1,17 @@
 import React from "react";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DroppableProvided,
+  DropResult,
+} from "@hello-pangea/dnd";
 
 import { useDashboard } from "../core/context/DashboardContext";
 import WidgetWrapper from "../components/wrappers/WidgetWrapper";
 
 const Dashboard: React.FC = () => {
-  const { state } = useDashboard();
+  const { state, dispatch } = useDashboard();
 
   if (state.widgets.length === 0) {
     return (
@@ -19,12 +26,45 @@ const Dashboard: React.FC = () => {
     );
   }
 
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+    dispatch({ type: "REORDER_WIDGETS", payload: result });
+  };
+
   return (
-    <div>
-      {state.widgets.map((widget) => (
-        <WidgetWrapper key={widget.id} widget={widget} />
-      ))}
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="dashboard" direction="horizontal">
+        {(provided: DroppableProvided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="flex flex-wrap"
+          >
+            {state.widgets.map((widget, index) => (
+              <Draggable key={widget.id} draggableId={widget.id} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    style={provided.draggableProps.style}
+                    className="p-3"
+                  >
+                    <WidgetWrapper
+                      key={widget.id}
+                      widget={widget}
+                      dragHandleProps={provided.dragHandleProps}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 
