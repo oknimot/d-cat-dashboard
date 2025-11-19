@@ -12,21 +12,21 @@ export interface BaseWidget {
   type: WidgetType;
 }
 
-export interface ChartWidget extends BaseWidget {
+export interface ChartWidgetProps extends BaseWidget {
   type: WidgetType.CHART;
   config: {
     chartType: "bar";
   };
 }
 
-export interface ListWidget extends BaseWidget {
+export interface ListWidgetProps extends BaseWidget {
   type: WidgetType.LIST;
   config: {
     itemCount: number;
   };
 }
 
-export interface TableWidget extends BaseWidget {
+export interface TableWidgetProps extends BaseWidget {
   type: WidgetType.TABLE;
   config: {
     rowCount: number;
@@ -40,14 +40,14 @@ export interface TodoItem {
   completed: boolean;
 }
 
-export interface TodoWidget extends BaseWidget {
+export interface TodoWidgetProps extends BaseWidget {
   type: WidgetType.TODO;
   config: {
     items: TodoItem[];
   };
 }
 
-export interface NotesWidget extends BaseWidget {
+export interface NotesWidgetProps extends BaseWidget {
   type: WidgetType.NOTES;
   config: {
     content: string;
@@ -55,8 +55,8 @@ export interface NotesWidget extends BaseWidget {
 }
 
 export type Widget =
-  | ChartWidget
-  | ListWidget
-  | TableWidget
-  | TodoWidget
-  | NotesWidget;
+  | ChartWidgetProps
+  | ListWidgetProps
+  | TableWidgetProps
+  | TodoWidgetProps
+  | NotesWidgetProps;
