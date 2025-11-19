@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import type { DashboardAction, DashboardState } from "../types/dashboard.types";
+import { Widget, WidgetType } from "../types/widget.types";
+import { widgetsManifest } from "../../components/widgets/config/widgets.manifest";
 
 // TODO: Find a better key construction (in case of addding authentication/multiple users)
 const LOCAL_STORAGE_KEY = "dashboardState";
@@ -19,6 +22,21 @@ const DashboardContext = createContext({
 // eslint-disable-next-line react-refresh/only-export-components
 export const useDashboard = () => useContext(DashboardContext);
 
+const createNewWidget = (type: WidgetType): Widget => {
+  const manifestEntry = widgetsManifest[type];
+
+  if (!manifestEntry) {
+    throw new Error(`Unknown widget type: ${type}`);
+  }
+
+  return {
+    id: uuidv4(),
+    type: type,
+    title: manifestEntry.title,
+    config: JSON.parse(JSON.stringify(manifestEntry.init)), // Better to do this "deep copy" to prevent mutation
+  };
+};
+
 const dashboardReducer = (
   state: DashboardState,
   action: DashboardAction
@@ -34,9 +52,17 @@ const dashboardReducer = (
       return { ...state, isAddModalOpen: true };
     case "CLOSE_ADD_MODAL":
       return { ...state, isAddModalOpen: false };
-    case "ADD_WIDGET":
-      console.log(action.payload);
-      return { ...state, widgets: [...state.widgets] };
+    case "ADD_WIDGET": {
+      const newWidget = createNewWidget(action.payload);
+      return { ...state, widgets: [...state.widgets, newWidget] };
+    }
+    case "UPDATE_WIDGET":
+      return {
+        ...state,
+        widgets: state.widgets.map((widget) =>
+          widget.id === action.payload.id ? action.payload : widget
+        ),
+      };
     default:
       return state;
   }

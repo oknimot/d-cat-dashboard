@@ -9,5 +9,5 @@ export type DashboardAction =
   | { type: "LOAD_STATE"; payload: DashboardState }
   | { type: "OPEN_ADD_MODAL" }
   | { type: "CLOSE_ADD_MODAL" }
-  | { type: "ADD_WIDGET"; payload: WidgetType };
-  
+  | { type: "ADD_WIDGET"; payload: WidgetType }
+  | { type: "UPDATE_WIDGET"; payload: Widget };
