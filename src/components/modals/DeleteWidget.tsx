@@ -4,14 +4,14 @@ import { useDashboard } from "../../core/context/DashboardContext";
 
 const DeleteWidget: React.FC = () => {
   const { state, dispatch } = useDashboard();
-  const { isDeleteModalOpen, widgetToDelete } = state;
+  const { isDeleteModalOpen, selectedWidget } = state;
 
-  if (!isDeleteModalOpen || !widgetToDelete) return null;
+  if (!isDeleteModalOpen || !selectedWidget) return null;
 
   const handleConfirmDelete = () => {
     dispatch({
       type: "DELETE_WIDGET",
-      payload: { id: widgetToDelete.id },
+      payload: { id: selectedWidget.id },
     });
     dispatch({ type: "CLOSE_DELETE_MODAL" });
   };
@@ -22,7 +22,7 @@ const DeleteWidget: React.FC = () => {
         <div className="text-center">
           <h2 className="text-xl font-bold text-white mb-4">Widget Delete</h2>
           <p className="text-gray-400 mb-6 text-sm">
-            Are you sure you want to delete "{widgetToDelete.title}"? This
+            Are you sure you want to delete "{selectedWidget.title}"? This
             action can't be undone.
           </p>
         </div>

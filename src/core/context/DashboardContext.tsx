@@ -18,7 +18,8 @@ const initState: DashboardState = {
   widgets: [],
   isAddModalOpen: false,
   isDeleteModalOpen: false,
-  widgetToDelete: null,
+  isEditModalOpen: false,
+  selectedWidget: null,
 };
 
 const DashboardContext = createContext({
@@ -56,7 +57,7 @@ const dashboardReducer = (
         ...action.payload,
         isAddModalOpen: false,
         isDeleteModalOpen: false,
-        widgetToDelete: null,
+        selectedWidget: null,
       };
     case "OPEN_ADD_MODAL":
       return { ...state, isAddModalOpen: true };
@@ -90,10 +91,18 @@ const dashboardReducer = (
       return {
         ...state,
         isDeleteModalOpen: true,
-        widgetToDelete: action.payload.widget,
+        selectedWidget: action.payload,
       };
     case "CLOSE_DELETE_MODAL":
-      return { ...state, isDeleteModalOpen: false, widgetToDelete: null };
+      return { ...state, isDeleteModalOpen: false, selectedWidget: null };
+    case "OPEN_EDIT_MODAL":
+      return {
+        ...state,
+        isEditModalOpen: true,
+        selectedWidget: action.payload,
+      };
+    case "CLOSE_EDIT_MODAL":
+      return { ...state, isEditModalOpen: false, selectedWidget: null };
     default:
       return state;
   }

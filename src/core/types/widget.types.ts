@@ -22,7 +22,7 @@ export interface ChartWidgetProps extends BaseWidget {
 export interface ListWidgetProps extends BaseWidget {
   type: WidgetType.LIST;
   config: {
-    itemCount: number;
+    team: string;
   };
 }
 
@@ -60,3 +60,10 @@ export type Widget =
   | TableWidgetProps
   | TodoWidgetProps
   | NotesWidgetProps;
+
+export type WidgetConfig =
+  | ChartWidgetProps["config"]
+  | ListWidgetProps["config"]
+  | TableWidgetProps["config"]
+  | TodoWidgetProps["config"]
+  | NotesWidgetProps["config"];
