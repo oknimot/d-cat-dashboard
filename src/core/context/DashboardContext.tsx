@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import type { DashboardAction, DashboardState } from "../types/dashboard.types";
@@ -80,6 +86,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(dashboardReducer, initState);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     try {
@@ -89,16 +96,20 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     } catch (error) {
       console.error("Failed to load state from localStorage", error);
+    } finally {
+      setIsLoaded(true);
     }
   }, []);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
-    } catch (error) {
-      console.error("Failed to save state to localStorage", error);
+    if (isLoaded) {
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+      } catch (error) {
+        console.error("Failed to save state to localStorage", error);
+      }
     }
-  }, [state]);
+  }, [state, isLoaded]);
 
   return (
     <DashboardContext.Provider value={{ state, dispatch }}>
