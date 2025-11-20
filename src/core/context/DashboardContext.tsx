@@ -17,6 +17,8 @@ const LOCAL_STORAGE_KEY = "dashboardState";
 const initState: DashboardState = {
   widgets: [],
   isAddModalOpen: false,
+  isDeleteModalOpen: false,
+  widgetToDelete: null,
 };
 
 const DashboardContext = createContext({
@@ -53,6 +55,8 @@ const dashboardReducer = (
         ...initState,
         ...action.payload,
         isAddModalOpen: false,
+        isDeleteModalOpen: false,
+        widgetToDelete: null,
       };
     case "OPEN_ADD_MODAL":
       return { ...state, isAddModalOpen: true };
@@ -77,6 +81,19 @@ const dashboardReducer = (
       orderedWidgets.splice(destination.index, 0, reorderedItem);
       return { ...state, widgets: orderedWidgets };
     }
+    case "DELETE_WIDGET":
+      return {
+        ...state,
+        widgets: state.widgets.filter((w) => w.id !== action.payload.id),
+      };
+    case "OPEN_DELETE_MODAL":
+      return {
+        ...state,
+        isDeleteModalOpen: true,
+        widgetToDelete: action.payload.widget,
+      };
+    case "CLOSE_DELETE_MODAL":
+      return { ...state, isDeleteModalOpen: false, widgetToDelete: null };
     default:
       return state;
   }

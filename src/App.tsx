@@ -4,6 +4,7 @@ import Header from "./layout/Header";
 import Dashboard from "./layout/Dashboard";
 import { DashboardProvider } from "./core/context/DashboardContext";
 import AddWidget from "./components/modals/AddWidget";
+import DeleteWidget from "./components/modals/DeleteWidget";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
           <Dashboard />
         </main>
         <AddWidget />
+        <DeleteWidget />
       </div>
     </DashboardProvider>
   );

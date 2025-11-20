@@ -45,6 +45,10 @@ const WidgetWrapper: React.FC<{
     }
   };
 
+  const handleDelete = () => {
+    dispatch({ type: "OPEN_DELETE_MODAL", payload: { widget } });
+  };
+
   return (
     <div className="rounded-lg shadow-lg flex flex-col h-full">
       <header className="bg-gray-700 px-1 flex items-center justify-between rounded-t-lg">
@@ -78,6 +82,7 @@ const WidgetWrapper: React.FC<{
             <PencilSquareIcon className="size-4" />
           </button>
           <button
+            onClick={handleDelete}
             className="text-gray-400 hover:text-red-500 transition-colors p-1 rounded-full"
             title="Delete widget"
           >
