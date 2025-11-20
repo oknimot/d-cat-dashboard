@@ -20,6 +20,7 @@ const WidgetWrapper: React.FC<{
 
   const inputRef = useRef<HTMLInputElement>(null);
   const WidgetComponent = widgetsManifest[widget.type]?.component;
+  const configComponent = widgetsManifest[widget.type]?.configComponent;
 
   useEffect(() => {
     if (isEditingTitle && inputRef.current) {
@@ -46,7 +47,11 @@ const WidgetWrapper: React.FC<{
   };
 
   const handleDelete = () => {
-    dispatch({ type: "OPEN_DELETE_MODAL", payload: { widget } });
+    dispatch({ type: "OPEN_DELETE_MODAL", payload: widget });
+  };
+
+  const handleEdit = () => {
+    dispatch({ type: "OPEN_EDIT_MODAL", payload: widget });
   };
 
   return (
@@ -75,12 +80,15 @@ const WidgetWrapper: React.FC<{
           </h3>
         )}
         <div className="flex items-center space-x-2">
-          <button
-            className="text-gray-400 hover:text-yellow-400 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-            title="Edit widget"
-          >
-            <PencilSquareIcon className="size-4" />
-          </button>
+          {configComponent && (
+            <button
+              onClick={handleEdit}
+              className="text-gray-400 hover:text-yellow-400 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+              title="Edit widget"
+            >
+              <PencilSquareIcon className="size-4" />
+            </button>
+          )}
           <button
             onClick={handleDelete}
             className="text-gray-400 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition-opacity"

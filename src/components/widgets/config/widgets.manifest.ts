@@ -1,10 +1,11 @@
-import { WidgetType, type Widget } from "../../../core/types/widget.types";
+import { WidgetConfig, WidgetType, type Widget } from "../../../core/types/widget.types";
 
 import ChartWidget from "../ChartWidget";
 import ListWidget from "../ListWidget";
 import NotesWidget from "../NotesWidget";
 import TableWidget from "../TableWidget";
 import TodoWidget from "../TodoWidget";
+import ListWidgetConfig from "./ListWidgetConfig";
 
 /**
  * Represents the manifest data for a widget.
@@ -13,8 +14,9 @@ export interface WidgetManifest {
   label: string;
   description: string;
   title: string;
-  init: Widget["config"];
-  component: React.ComponentType<{widget: Widget}>;
+  init: WidgetConfig;
+  component: React.ComponentType<{ widget: Widget }>;
+  configComponent?: React.ComponentType<{ config: WidgetConfig, onConfigChange: (e: React.ChangeEvent) => void }>;
 }
 
 export const widgetsManifest: Record<WidgetType, WidgetManifest> = {
@@ -33,11 +35,12 @@ export const widgetsManifest: Record<WidgetType, WidgetManifest> = {
     component: TableWidget as React.ComponentType<{ widget: Widget }>,
   },
   [WidgetType.LIST]: {
-    label: "List",
-    description: "Show a simple list of items.",
+    label: "NHL Week Schedule",
+    description: "Show a simple list of NHL team week schedule.",
     title: "List Widget",
-    init: { itemCount: 3 },
+    init: { team: "" },
     component: ListWidget as React.ComponentType<{ widget: Widget }>,
+    configComponent: ListWidgetConfig as React.ComponentType<{ config: WidgetConfig, onConfigChange: (e: React.ChangeEvent<Element>) => void }>,
   },
   [WidgetType.NOTES]: {
     label: "Notes",
@@ -51,6 +54,6 @@ export const widgetsManifest: Record<WidgetType, WidgetManifest> = {
     description: "Track your tasks and get things done.",
     title: "Todo Widget",
     init: { items: [] },
-    component: TodoWidget as React.ComponentType<{ widget: Widget }>, 
+    component: TodoWidget as React.ComponentType<{ widget: Widget }>,
   },
 };
