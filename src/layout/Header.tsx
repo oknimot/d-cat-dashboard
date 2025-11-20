@@ -97,7 +97,7 @@ const Header: React.FC = () => {
       <div className="flex items-center space-x-2 sm:space-x-5">
         <button
           onClick={handleImport}
-          className="flex items-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white font-extralight py-2 px-4 rounded-lg transition duration-300"
+          className="flex items-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition duration-300"
           title="Import Dashboard"
         >
           <ArrowDownTrayIcon className="size-5" />
@@ -112,7 +112,7 @@ const Header: React.FC = () => {
         />
         <button
           onClick={handleExport}
-          className="flex items-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white font-extralight py-2 px-4 rounded-lg transition duration-300"
+          className="flex items-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition duration-300"
           title="Export Dashboard"
         >
           <ArrowUpTrayIcon className="size-5" />
@@ -120,7 +120,7 @@ const Header: React.FC = () => {
         </button>
         <button
           onClick={() => dispatch({ type: "OPEN_ADD_MODAL" })}
-          className="flex items-center space-x-2 bg-yellow-400 hover:bg-yellow-500 text-white font-extralight py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+          className="flex items-center space-x-2 bg-yellow-400 hover:bg-yellow-500 text-white py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
         >
           <PlusIcon className="size-5" />
           <span className="hidden sm:inline">Widget</span>
