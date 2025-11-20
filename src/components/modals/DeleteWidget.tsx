@@ -21,7 +21,7 @@ const DeleteWidget: React.FC = () => {
       <div className="bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-md border border-gray-700">
         <div className="text-center">
           <h2 className="text-xl font-bold text-white mb-4">Widget Delete</h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-gray-400 mb-6 text-sm">
             Are you sure you want to delete "{widgetToDelete.title}"? This
             action can't be undone.
           </p>

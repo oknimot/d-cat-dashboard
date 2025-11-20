@@ -51,8 +51,8 @@ const WidgetWrapper: React.FC<{
 
   return (
     <div className="rounded-lg shadow-lg flex flex-col h-full">
-      <header className="bg-gray-700 px-1 flex items-center justify-between rounded-t-lg">
-        <div {...dragHandleProps} className="cursor-grab text-gray-400">
+      <header className="bg-gray-700 px-1 flex items-center justify-between rounded-t-lg group">
+        <div {...dragHandleProps} className="cursor-grab text-gray-400 pl-2">
           <WindowIcon className="size-4" />
         </div>
         {isEditingTitle ? (
@@ -76,14 +76,14 @@ const WidgetWrapper: React.FC<{
         )}
         <div className="flex items-center space-x-2">
           <button
-            className="text-gray-400 hover:text-yellow-400 transition-colors p-1 rounded-full"
+            className="text-gray-400 hover:text-yellow-400 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
             title="Edit widget"
           >
             <PencilSquareIcon className="size-4" />
           </button>
           <button
             onClick={handleDelete}
-            className="text-gray-400 hover:text-red-500 transition-colors p-1 rounded-full"
+            className="text-gray-400 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
             title="Delete widget"
           >
             <TrashIcon className="size-4" />

@@ -120,7 +120,7 @@ const Header: React.FC = () => {
         </button>
         <button
           onClick={() => dispatch({ type: "OPEN_ADD_MODAL" })}
-          className="flex items-center space-x-2 bg-yellow-400 hover:bg-yellow-500 text-white py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+          className="flex items-center space-x-2 bg-yellow-400 hover:bg-yellow-500 text-gray-700 py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
         >
           <PlusIcon className="size-5" />
           <span className="hidden sm:inline">Widget</span>
