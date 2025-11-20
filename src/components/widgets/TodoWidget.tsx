@@ -75,6 +75,13 @@ const TodoWidget: React.FC<{ widget: TodoWidgetProps }> = ({ widget }) => {
           Add
         </button>
       </form>
+
+      {widget.config.items.length === 0 && (
+        <div className="text-gray-400 text-sm text-center mt-4">
+          No tasks yet.
+        </div>
+      )}
+
       <ul className="space-y-2 overflow-y-auto flex-grow">
         {widget.config.items.map((item) => (
           <li
