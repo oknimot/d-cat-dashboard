@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import type { TodoItem, TodoWidgetProps } from "../../core/types/widget.types";
 import { useDashboard } from "../../core/context/DashboardContext";
+import { checkedOnBottom } from "./utils/utils";
 
 const TodoWidget: React.FC<{ widget: TodoWidgetProps }> = ({ widget }) => {
   const { dispatch } = useDashboard();
@@ -52,10 +53,6 @@ const TodoWidget: React.FC<{ widget: TodoWidgetProps }> = ({ widget }) => {
       config: { ...widget.config, items: todoItems },
     };
     dispatch({ type: "UPDATE_WIDGET", payload: todoWidget });
-  };
-
-  const checkedOnBottom = (todos: TodoItem[]): TodoItem[] => {
-    return todos.sort((a, b) => (a.completed ? 1 : 0) - (b.completed ? 1 : 0));
   };
 
   return (
@@ -113,7 +110,7 @@ const TodoWidget: React.FC<{ widget: TodoWidgetProps }> = ({ widget }) => {
               onClick={() => handleTaskAction(item.id, "delete")}
               className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity ml-3 p-1"
             >
-              <TrashIcon className="size-4" />
+              <TrashIcon data-testid="trash-icon" className="size-4" />
             </button>
           </li>
         ))}
