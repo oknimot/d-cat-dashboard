@@ -105,4 +105,4 @@ const WidgetWrapper: React.FC<{
   );
 };
 
-export default WidgetWrapper;
+export default React.memo(WidgetWrapper);

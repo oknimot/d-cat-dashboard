@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     style={provided.draggableProps.style}
-                    className="p-3"
+                    className="p-3 sm:w-1/2 md:w-1/3 lg:w-1/4"
                   >
                     <WidgetWrapper
                       key={widget.id}

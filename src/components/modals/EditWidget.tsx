@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { widgetsManifest } from "../widgets/config/widgets.manifest";
@@ -9,6 +9,13 @@ const EditWidget: React.FC = () => {
   const { state, dispatch } = useDashboard();
   const { isEditModalOpen, selectedWidget } = state;
   const [config, setConfig] = useState<WidgetConfig>({} as WidgetConfig);
+
+  useEffect(() => {
+    if (selectedWidget) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setConfig(selectedWidget.config);
+    }
+  }, [selectedWidget]);
 
   if (!isEditModalOpen || !selectedWidget) return null;
 

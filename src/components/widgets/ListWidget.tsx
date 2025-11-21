@@ -45,9 +45,13 @@ const ListWidget: React.FC<{ widget: ListWidgetProps }> = ({ widget }) => {
           const response = await fetch(proxyUrl, { signal: controller.signal });
           const data: ScheduleResponse = await response.json();
           setGames(data.games || []);
-        } catch (err) {
-          console.error("Error fetching NHL schedule:", err);
-          setError("Failed to load schedule.");
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            if (err.name !== "AbortError") {
+              console.error("Error fetching NHL schedule:", err);
+              setError("Failed to load schedule.");
+            }
+          }
         } finally {
           if (!controller.signal.aborted) {
             setLoading(false);
@@ -89,7 +93,7 @@ const ListWidget: React.FC<{ widget: ListWidgetProps }> = ({ widget }) => {
           const isHome = game.homeTeam.abbrev === team;
           const opponent = isHome ? game.awayTeam : game.homeTeam;
           const formattedDate = gameDate.toLocaleDateString(undefined, {
-            weekday: "short",
+            weekday: "long",
             month: "short",
             day: "numeric",
           });
@@ -136,4 +140,4 @@ const ListWidget: React.FC<{ widget: ListWidgetProps }> = ({ widget }) => {
   );
 };
 
-export default ListWidget;
+export default React.memo(ListWidget);

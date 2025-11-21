@@ -2,6 +2,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   useState,
 } from "react";
@@ -137,8 +138,10 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [state, isLoaded]);
 
+  const contextValue = useMemo(() => ({ state, dispatch }), [state]);
+
   return (
-    <DashboardContext.Provider value={{ state, dispatch }}>
+    <DashboardContext.Provider value={contextValue}>
       {children}
     </DashboardContext.Provider>
   );

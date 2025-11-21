@@ -86,9 +86,13 @@ const TodoWidget: React.FC<{ widget: TodoWidgetProps }> = ({ widget }) => {
         {widget.config.items.map((item) => (
           <li
             key={item.id}
-            className="flex items-center justify-between bg-gray-200/50 p-2 rounded-md group"
+            className={`flex items-center justify-between p-2 rounded-md group transition-all duration-300 ease-in-out ${
+              item.completed
+                ? "bg-gray-400/40 opacity-60"
+                : "bg-gray-200/50 opacity-100"
+            }`}
           >
-            <div className="flex items-center">
+            <label className="flex items-center flex-grow cursor-pointer">
               <input
                 type="checkbox"
                 checked={item.completed}
@@ -96,7 +100,7 @@ const TodoWidget: React.FC<{ widget: TodoWidgetProps }> = ({ widget }) => {
                 className="size-4 focus:ring-yellow-400 focus:ring-2 mr-3"
               />
               <span
-                className={`text-sm ${
+                className={`text-sm transition-all duration-300 ${
                   item.completed
                     ? "line-through text-gray-400"
                     : "text-gray-500"
@@ -104,10 +108,10 @@ const TodoWidget: React.FC<{ widget: TodoWidgetProps }> = ({ widget }) => {
               >
                 {item.text}
               </span>
-            </div>
+            </label>
             <button
               onClick={() => handleTaskAction(item.id, "delete")}
-              className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity ml-3"
+              className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity ml-3 p-1"
             >
               <TrashIcon className="size-4" />
             </button>
@@ -118,4 +122,4 @@ const TodoWidget: React.FC<{ widget: TodoWidgetProps }> = ({ widget }) => {
   );
 };
 
-export default TodoWidget;
+export default React.memo(TodoWidget);
