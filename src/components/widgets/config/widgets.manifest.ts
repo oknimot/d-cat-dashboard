@@ -1,4 +1,8 @@
-import { WidgetConfig, WidgetType, type Widget } from "../../../core/types/widget.types";
+import {
+  WidgetConfig,
+  WidgetType,
+  type Widget,
+} from "../../../core/types/widget.types";
 
 import ChartWidget from "../ChartWidget";
 import ListWidget from "../ListWidget";
@@ -6,6 +10,7 @@ import NotesWidget from "../NotesWidget";
 import TableWidget from "../TableWidget";
 import TodoWidget from "../TodoWidget";
 import ListWidgetConfig from "./ListWidgetConfig";
+import TableWidgetConfig from "./TableWidgetConfig";
 
 /**
  * Represents the manifest data for a widget.
@@ -16,7 +21,10 @@ export interface WidgetManifest {
   title: string;
   init: WidgetConfig;
   component: React.ComponentType<{ widget: Widget }>;
-  configComponent?: React.ComponentType<{ config: WidgetConfig, onConfigChange: (e: React.ChangeEvent) => void }>;
+  configComponent?: React.ComponentType<{
+    config: WidgetConfig;
+    onConfigChange: (e: React.ChangeEvent) => void;
+  }>;
 }
 
 export const widgetsManifest: Record<WidgetType, WidgetManifest> = {
@@ -31,8 +39,12 @@ export const widgetsManifest: Record<WidgetType, WidgetManifest> = {
     label: "Table",
     description: "Organize data in rows and columns.",
     title: "Table Widget",
-    init: { rowCount: 3, colCount: 3 },
+    init: { rowCount: 0, colCount: 0 },
     component: TableWidget as React.ComponentType<{ widget: Widget }>,
+    configComponent: TableWidgetConfig as React.ComponentType<{
+      config: WidgetConfig;
+      onConfigChange: (e: React.ChangeEvent<Element>) => void;
+    }>,
   },
   [WidgetType.LIST]: {
     label: "NHL Week Schedule",
@@ -40,7 +52,10 @@ export const widgetsManifest: Record<WidgetType, WidgetManifest> = {
     title: "List Widget",
     init: { team: "" },
     component: ListWidget as React.ComponentType<{ widget: Widget }>,
-    configComponent: ListWidgetConfig as React.ComponentType<{ config: WidgetConfig, onConfigChange: (e: React.ChangeEvent<Element>) => void }>,
+    configComponent: ListWidgetConfig as React.ComponentType<{
+      config: WidgetConfig;
+      onConfigChange: (e: React.ChangeEvent<Element>) => void;
+    }>,
   },
   [WidgetType.NOTES]: {
     label: "Notes",
