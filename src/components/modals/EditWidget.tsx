@@ -3,13 +3,18 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { widgetsManifest } from "../widgets/config/widgets.manifest";
 import { useDashboard } from "../../core/context/DashboardContext";
-import { Widget, WidgetConfig } from "../../core/types/widget.types";
+import type { Widget, WidgetConfig } from "../../core/types/widget.types";
 
+/**
+ * The `EditWidget` component. Provides a modal that allows users to edit the configuration of a selected widget.
+ * @returns The JSX element representing the edit widget modal.
+ */
 const EditWidget: React.FC = () => {
   const { state, dispatch } = useDashboard();
   const { isEditModalOpen, selectedWidget } = state;
   const [config, setConfig] = useState<WidgetConfig>({} as WidgetConfig);
 
+  // Sync local state if widget data changes from an external source (like import)
   useEffect(() => {
     if (selectedWidget) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -17,17 +22,31 @@ const EditWidget: React.FC = () => {
     }
   }, [selectedWidget]);
 
+  // Nothing to render if the state flag indicates that the modal is not open or no widget is selected
   if (!isEditModalOpen || !selectedWidget) return null;
 
+  /**
+   * Handles the submission of the rendered edit widget form and closes the edit widget modal.
+   * @param {React.FormEvent} e - The form submission event.
+   *
+   * @private
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedWidget) {
-      const updatedWidget = { ...selectedWidget, config };
-      dispatch({ type: "UPDATE_WIDGET", payload: updatedWidget as Widget });
-      dispatch({ type: "CLOSE_EDIT_MODAL" });
-    }
+    const updatedWidget = { ...selectedWidget, config };
+    dispatch({ type: "UPDATE_WIDGET", payload: updatedWidget as Widget });
+    dispatch({ type: "CLOSE_EDIT_MODAL" });
   };
 
+  /**
+   * Handles changes in the widget configuration and updates the local state.
+   * @param {React.ChangeEvent} e - The change event.
+   *
+   * @private
+   *
+   * @remarks
+   * Because of the dynamic nature of the config fields `rowCount` and `colCount`, this function get checks if the changed field is numeric and converts it to an integer if necessary.
+   */
   const handleConfigChange = (e: React.ChangeEvent) => {
     const { name, value } = e.target as HTMLInputElement;
     const isNumeric = ["rowCount", "colCount"].includes(name);
@@ -37,15 +56,16 @@ const EditWidget: React.FC = () => {
     }));
   };
 
+  /**
+   * Renders the config fields for the selected widget if available.
+   * @returns The JSX element representing the config fields.
+   *
+   * @private
+   */
   const renderConfigFields = () => {
-    const ConfigComponent =
-      widgetsManifest[selectedWidget.type]?.configComponent;
-    if (!ConfigComponent) {
-      return null;
-    }
-    return (
-      <ConfigComponent config={config} onConfigChange={handleConfigChange} />
-    );
+    const Config = widgetsManifest[selectedWidget.type]?.configComponent;
+    if (!Config) return null;
+    return <Config config={config} onConfigChange={handleConfigChange} />;
   };
 
   return (

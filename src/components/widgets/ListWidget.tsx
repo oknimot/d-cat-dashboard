@@ -32,6 +32,7 @@ const ListWidget: React.FC<{ widget: ListWidgetProps }> = ({ widget }) => {
 
   useEffect(() => {
     if (team) {
+      // Use AbortController to cancel the fetch if the component unmounts
       const controller = new AbortController();
       const fetchSchedule = async () => {
         setLoading(true);
@@ -66,14 +67,15 @@ const ListWidget: React.FC<{ widget: ListWidgetProps }> = ({ widget }) => {
     }
   }, [team]);
 
+  // UI info render logic
   if (loading) {
     return (
       <div className="text-gray-400 text-sm text-center mt-4">Loading...</div>
     );
-  } else if (error) {
+  }
+  if (error) {
     return <div className="text-red-400 text-sm text-center mt-4">{error}</div>;
   }
-
   if (games.length === 0 && !team) {
     return (
       <div className="text-gray-400 text-sm text-center mt-4">

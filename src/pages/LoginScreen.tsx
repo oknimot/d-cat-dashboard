@@ -6,7 +6,16 @@ const LoginScreen: React.FC = () => {
   const { login } = useAuth();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const handleLogin = async () => {
+  /**
+   * Handles the login process triggering the login action.
+   * @private
+   *
+   * @returns {Promise<void>}
+   *
+   * @remarks
+   * isLoggingIn is set to true to indicate that the login process is in progress - only for UI purposes.
+   */
+  const handleLogin = async (): Promise<void> => {
     setIsLoggingIn(true);
     await login();
     setIsLoggingIn(false);

@@ -13,6 +13,7 @@ import WidgetWrapper from "../components/wrappers/WidgetWrapper";
 const Dashboard: React.FC = () => {
   const { state, dispatch } = useDashboard();
 
+  // Render info banner if the dashboard is empty
   if (state.widgets.length === 0) {
     return (
       <div className="text-center py-32">
@@ -26,10 +27,13 @@ const Dashboard: React.FC = () => {
     );
   }
 
+  /**
+   * Handles the end of a drag and drop operation and reorders the widgets in the dashboard.
+   * @param {DropResult} result - The result of the drag and drop operation.
+   * @private
+   */
   const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
+    if (!result.destination) return;
     dispatch({ type: "REORDER_WIDGETS", payload: result });
   };
 

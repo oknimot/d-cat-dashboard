@@ -8,9 +8,9 @@ import React, {
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import type { DashboardAction, DashboardState } from "../types/dashboard.types";
-import { Widget, WidgetType } from "../types/widget.types";
 import { widgetsManifest } from "../../components/widgets/config/widgets.manifest";
+import type { Widget, WidgetType } from "../types/widget.types";
+import type { DashboardAction, DashboardState } from "../types/dashboard.types";
 
 // TODO: Find a better key construction (in case of addding authentication/multiple users)
 const LOCAL_STORAGE_KEY = "dashboardState";
@@ -32,9 +32,14 @@ const DashboardContext = createContext({
 // eslint-disable-next-line react-refresh/only-export-components
 export const useDashboard = () => useContext(DashboardContext);
 
+/**
+ * Creates a new widget of the specified type
+ * @param {WidgetType} type - The type of widget to create
+ * @returns {Widget} A newly created widget object
+ * @private
+ */
 const createNewWidget = (type: WidgetType): Widget => {
   const manifestEntry = widgetsManifest[type];
-
   if (!manifestEntry) {
     throw new Error(`Unknown widget type: ${type}`);
   }
@@ -115,6 +120,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
   const [state, dispatch] = useReducer(dashboardReducer, initState);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Load state from localStorage
   useEffect(() => {
     try {
       const storedState = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -128,6 +134,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
+  // Save state to localStorage
   useEffect(() => {
     if (isLoaded) {
       try {
@@ -138,6 +145,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [state, isLoaded]);
 
+  // Create context value and memoize for render performance optimization
   const contextValue = useMemo(() => ({ state, dispatch }), [state]);
 
   return (

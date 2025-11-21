@@ -7,57 +7,72 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { useDashboard } from "../core/context/DashboardContext";
-import { DashboardState } from "../core/types/dashboard.types";
 import { useAuth } from "../core/context/AuthContext";
+import type { DashboardState } from "../core/types/dashboard.types";
 
 const Header: React.FC = () => {
   const { state, dispatch } = useDashboard();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { user, logout } = useAuth();
+  /** Input element reference for file upload. */
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
+  /**
+   * Handles the export of the dashboard state to a JSON file.
+   * @private
+   */
   const handleExport = () => {
     if (state.widgets.length === 0) {
-      alert(
-        "Sorry, but it's not possible to export an empty dashboard. Create a widget first and try again."
-      );
+      alert("Sorry, but it's not possible to export an empty dashboard.");
       return;
     }
     try {
+      // Create a pretty encoded JSON string from the dashboard state
       const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
         JSON.stringify(state, null, 2)
       )}`;
+      // Create a link element to trigger the download
       const link = document.createElement("a");
       link.href = jsonString;
       link.download = `d-cat-dashboard-export-${new Date().toISOString()}.json`;
       link.click();
     } catch (error) {
       console.error("Failed to export dashboard state", error);
-      alert("Error: Could not export dashboard.");
+      alert("Error: Could not export dashboard. Try again later.");
     }
   };
 
+  /**
+   * Handles the triggering of the import of a dashboard state from a JSON file.
+   * @private
+   */
   const handleImport = () => {
     fileInputRef.current?.click();
   };
 
+  /**
+   * Handles the change event of the file input element and imports the dashboard state from the selected file.
+   * @param {React.ChangeEvent} event - The change event of the input element.
+   * @private
+   */
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
     if (file.type !== "application/json") {
       alert("Invalid file type. Please select a JSON file.");
       return;
     }
 
     const reader = new FileReader();
+    // Define the callback function to be executed when the file is read
     reader.onload = (e) => {
       try {
         const text = e.target?.result;
+
+        // File content and structure validation
         if (typeof text !== "string") {
           throw new Error("Failed to read file content.");
         }
         const importedState = JSON.parse(text) as DashboardState;
-
         if (
           importedState === null ||
           typeof importedState !== "object" ||

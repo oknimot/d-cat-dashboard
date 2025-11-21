@@ -1,17 +1,28 @@
 import React, { useMemo, useState } from "react";
 
-import { TableWidgetProps } from "../../core/types/widget.types";
-import { SortConfig, SortDirection } from "../../core/types/table.types";
+import type { TableWidgetProps } from "../../core/types/widget.types";
+import type { SortConfig, SortDirection } from "../../core/types/table.types";
 
 const TableWidget: React.FC<{ widget: TableWidgetProps }> = ({ widget }) => {
   const { rowCount, colCount } = widget.config;
   const [filterText, setFilterText] = useState("");
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
+  /**
+   * Generates mock data for the table.
+   * @returns An array of objects representing table rows.
+   *
+   * @private
+   *
+   * @remarks
+   * The data is generated using a deterministic algorithm to ensure consistency across different runs.
+   * Using memoize the raw data generation so it doesn't change on every render unless config changes.
+   */
   const rawData = useMemo(() => {
     return Array.from({ length: rowCount }, (_, r) => {
       const rowId = r + 1;
       const rowData: Record<string, string | number> = { id: rowId };
+      // Generating slightly randomized-looking but deterministic data for demonstration
       for (let c = 1; c <= colCount; c++) {
         const suffix = String.fromCharCode(65 + ((r + c) % 26));
         rowData[`col${c}`] = `Data ${rowId}-${c} (${suffix})`;
@@ -20,10 +31,26 @@ const TableWidget: React.FC<{ widget: TableWidgetProps }> = ({ widget }) => {
     });
   }, [rowCount, colCount]);
 
+  /**
+   * Generates column names for the table.
+   * @returns An array of column names.
+   *
+   * @private
+   *
+   * @remarks
+   * The column names are generated using a deterministic algorithm to ensure consistency across different runs.
+   * Using memoize the column name generation so it doesn't change on every render unless config changes.
+   */
   const columns = useMemo(() => {
     return Array.from({ length: colCount }, (_, i) => `col${i + 1}`);
   }, [colCount]);
 
+  /**
+   * Handles sorting of the table data with local state.
+   * @param {string} key - The key of the column to sort.
+   *
+   * @private
+   */
   const requestSort = (key: string) => {
     let direction: SortDirection = "asc";
     if (
@@ -36,6 +63,15 @@ const TableWidget: React.FC<{ widget: TableWidgetProps }> = ({ widget }) => {
     setSortConfig({ key, direction });
   };
 
+  /**
+   * Filters the table data to match the provided filter text and sorting configuration.
+   * @returns An array of filtered table rows.
+   *
+   * @private
+   *
+   * @remarks
+   * Using memoize the filtered data generation so it doesn't change on every render unless config changes.
+   */
   const processedData = useMemo(() => {
     let data = [...rawData];
 
@@ -47,7 +83,6 @@ const TableWidget: React.FC<{ widget: TableWidgetProps }> = ({ widget }) => {
         )
       );
     }
-
     if (sortConfig) {
       data.sort((a, b) => {
         const valA = a[sortConfig.key];
@@ -66,6 +101,7 @@ const TableWidget: React.FC<{ widget: TableWidgetProps }> = ({ widget }) => {
     return data;
   }, [rawData, filterText, sortConfig]);
 
+  // Prevent to display only logic table structure
   if (colCount < 1 || rowCount < 1) {
     return (
       <div className="text-gray-400 text-sm text-center mt-4">

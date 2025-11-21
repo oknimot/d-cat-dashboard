@@ -2,17 +2,25 @@ import React from "react";
 
 import { useDashboard } from "../../core/context/DashboardContext";
 
+/**
+ * The `DeleteWidget` component. Provides a modal allowing the user to approve or cancel the deletion of a widget from the dashboard.
+ * @returns The JSX element representing the delete widget modal.
+ */
 const DeleteWidget: React.FC = () => {
   const { state, dispatch } = useDashboard();
   const { isDeleteModalOpen, selectedWidget } = state;
 
+  // Nothing to render if the state flag indicates that the modal is not open or no widget is selected
   if (!isDeleteModalOpen || !selectedWidget) return null;
 
+  /**
+   * Handles the deletion of a widget and closes the delete widget modal.
+   *
+   * @private
+   */
   const handleConfirmDelete = () => {
-    dispatch({
-      type: "DELETE_WIDGET",
-      payload: { id: selectedWidget.id },
-    });
+    const id = selectedWidget.id;
+    dispatch({ type: "DELETE_WIDGET", payload: { id } });
     dispatch({ type: "CLOSE_DELETE_MODAL" });
   };
 

@@ -2,20 +2,35 @@ import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { widgetsManifest } from "../widgets/config/widgets.manifest";
-import type { WidgetType } from "../../core/types/widget.types";
 import { useDashboard } from "../../core/context/DashboardContext";
+import type { WidgetType } from "../../core/types/widget.types";
 
+/**
+ * The `AddWidget` component. Provides a modal allowing the user to add a new widget to the dashboard.
+ * @returns The JSX element representing the add widget modal.
+ */
 const AddWidget: React.FC = () => {
   const { state, dispatch } = useDashboard();
 
+  // Nothing to render if the state flag indicates that the modal is not open
   if (!state.isAddModalOpen) return null;
 
+  /**
+   * Converts the widgetsManifest object into an array of option objects.
+   * Each option object contains the type, label, and description of each widget.
+   */
   const options = Object.entries(widgetsManifest).map(([type, details]) => ({
     type: type as WidgetType,
     label: details.label,
     description: details.description,
   }));
 
+  /**
+   * Handles the selection of a widget type and closes the add widget modal.
+   * @param {WidgetType} type - The type of widget to add.
+   *
+   * @private
+   */
   const handleSelection = (type: WidgetType) => {
     dispatch({ type: "ADD_WIDGET", payload: type });
     dispatch({ type: "CLOSE_ADD_MODAL" });
