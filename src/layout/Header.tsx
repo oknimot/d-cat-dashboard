@@ -3,14 +3,17 @@ import {
   ArrowDownTrayIcon,
   ArrowUpTrayIcon,
   PlusIcon,
+  PowerIcon,
 } from "@heroicons/react/24/outline";
 
 import { useDashboard } from "../core/context/DashboardContext";
 import { DashboardState } from "../core/types/dashboard.types";
+import { useAuth } from "../core/context/AuthContext";
 
 const Header: React.FC = () => {
   const { state, dispatch } = useDashboard();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { user, logout } = useAuth();
 
   const handleExport = () => {
     if (state.widgets.length === 0) {
@@ -92,40 +95,64 @@ const Header: React.FC = () => {
 
   return (
     <header className="bg-gray-800 shadow-md p-4 flex justify-between items-center">
-      <h1 className="text-xl text-yellow-400">Dashboard</h1>
+      <h1 className="text-xl text-yellow-400 tracking-wide">Dashboard</h1>
 
-      <div className="flex items-center space-x-2 sm:space-x-5">
-        <button
-          onClick={handleImport}
-          className="flex items-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition duration-300"
-          title="Import Dashboard"
-        >
-          <ArrowDownTrayIcon className="size-5" />
-          <span className="hidden sm:inline">Import</span>
-        </button>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={onFileChange}
-          accept=".json"
-          className="hidden"
-        />
-        <button
-          onClick={handleExport}
-          className="flex items-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition duration-300"
-          title="Export Dashboard"
-        >
-          <ArrowUpTrayIcon className="size-5" />
-          <span className="hidden sm:inline">Export</span>
-        </button>
-        <button
-          onClick={() => dispatch({ type: "OPEN_ADD_MODAL" })}
-          className="flex items-center space-x-2 bg-yellow-400 hover:bg-yellow-500 text-gray-700 py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-        >
-          <PlusIcon className="size-5" />
-          <span className="hidden sm:inline">Widget</span>
-        </button>
-      </div>
+      {user && (
+        <React.Fragment>
+          <div className="flex items-center space-x-2 sm:space-x-5">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <button
+                onClick={handleImport}
+                className="flex items-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition duration-300"
+                title="Import Dashboard"
+              >
+                <ArrowDownTrayIcon className="size-5" />
+                <span className="hidden sm:inline">Import</span>
+              </button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={onFileChange}
+                accept=".json"
+                className="hidden"
+              />
+              <button
+                onClick={handleExport}
+                className="flex items-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition duration-300"
+                title="Export Dashboard"
+              >
+                <ArrowUpTrayIcon className="size-5" />
+                <span className="hidden sm:inline">Export</span>
+              </button>
+              <button
+                onClick={() => dispatch({ type: "OPEN_ADD_MODAL" })}
+                className="flex items-center space-x-2 bg-yellow-400 hover:bg-yellow-500 text-gray-700 py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+              >
+                <PlusIcon className="size-5" />
+                <span className="hidden sm:inline">Widget</span>
+              </button>
+            </div>
+            <div className="h-8 w-px bg-gray-600 hidden sm:block"></div>
+
+            <div className="flex items-center space-x-3">
+              <img
+                src={user.avatarUrl}
+                alt={user.name}
+                className="w-9 h-9 rounded-full border-2 border-yellow-500"
+              />
+              <span className="hidden lg:inline text-gray-300 font-medium">
+                {user.name}
+              </span>
+              <button
+                onClick={logout}
+                className="text-gray-400 hover:text-red-500 transition"
+              >
+                <PowerIcon className="size-5" />
+              </button>
+            </div>
+          </div>
+        </React.Fragment>
+      )}
     </header>
   );
 };
